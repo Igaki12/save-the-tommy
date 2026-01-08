@@ -65,6 +65,7 @@ const SetupScreen = () => {
             flex={1}
             variant="outline"
             borderColor="whiteAlpha.400"
+            color="whiteAlpha.900"
             onClick={() => setNames((prev) => [...prev, ""])}
             isDisabled={!canAdd}
           >
@@ -74,6 +75,7 @@ const SetupScreen = () => {
             flex={1}
             variant="outline"
             borderColor="whiteAlpha.400"
+            color="whiteAlpha.900"
             onClick={() => setNames((prev) => prev.slice(0, -1))}
             isDisabled={!canRemove}
           >
