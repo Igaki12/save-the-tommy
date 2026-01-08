@@ -7,6 +7,19 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   config,
+  components: {
+    Button: {
+      baseStyle: {
+        _active: {
+          bg: "#0b0f1c",
+          color: "whiteAlpha.900"
+        },
+        _focusVisible: {
+          boxShadow: "0 0 0 2px rgba(38, 246, 255, 0.6)"
+        }
+      }
+    }
+  },
   styles: {
     global: {
       ":root": {

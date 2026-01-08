@@ -8,6 +8,7 @@ import {
   Text,
   useDisclosure
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { useGame } from "../context/GameContext";
 import { TaskCard, taskDeck } from "../data/tasks";
@@ -47,7 +48,34 @@ const GameScreen = () => {
   };
 
   const showConsentButton = turn >= 3;
-  const pulseConsent = turn >= 5 && !consentUnlocked;
+
+  const cardListVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, x: -32, filter: "blur(3px)" },
+    show: {
+      opacity: 1,
+      x: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
+
+  const revealVariants = {
+    hidden: { opacity: 0.35, scale: 0.98 },
+    show: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.4, ease: "easeOut" }
+    }
+  };
 
   return (
     <Box minH="100dvh" pb={10}>
@@ -75,7 +103,14 @@ const GameScreen = () => {
         </Text>
       </Box>
 
-      <Grid gap={4}>
+      <Grid
+        gap={4}
+        as={motion.div}
+        variants={cardListVariants}
+        initial="hidden"
+        animate="show"
+        key={`turn-${turn}`}
+      >
         {cards.map((card) => {
           const isSelected = selectedCard?.id === card.id;
           return (
@@ -92,6 +127,8 @@ const GameScreen = () => {
               borderColor={isSelected ? "var(--neon-cyan)" : "#2b314a"}
               boxShadow={isSelected ? "0 0 20px rgba(38, 246, 255, 0.35)" : "none"}
               _hover={{ borderColor: "var(--neon-cyan)" }}
+              as={motion.button}
+              variants={cardVariants}
             >
               <Box>
                 <Text fontSize="xs" color="whiteAlpha.500" mb={2}>
@@ -104,7 +141,15 @@ const GameScreen = () => {
                   whiteSpace="normal"
                   wordBreak="break-word"
                 >
-                  {isSelected ? card.full : card.preview}
+                  <Box
+                    as={motion.span}
+                    display="block"
+                    variants={revealVariants}
+                    initial="hidden"
+                    animate={isSelected ? "show" : "hidden"}
+                  >
+                    {isSelected ? card.full : card.preview}
+                  </Box>
                 </Heading>
               </Box>
             </Button>
@@ -125,22 +170,37 @@ const GameScreen = () => {
           overflow="hidden"
           _hover={{ bg: "#f0e6d5" }}
           _after={
-            pulseConsent
-              ? {
-                  content: '""',
-                  position: "absolute",
-                  inset: "-6px",
-                  borderRadius: "999px",
-                  border: "2px solid #f8f3ea",
-                  animation: "pulse 2s infinite",
-                  opacity: 0.6
-                }
-              : undefined
+            {
+              content: '""',
+              position: "absolute",
+              inset: "-6px",
+              borderRadius: "999px",
+              border: "2px solid #f8f3ea",
+              animation: "pulse 1s infinite",
+              opacity: 0.8
+            }
+          }
+          _before={
+            {
+              content: '""',
+              position: "absolute",
+              inset: "-18px",
+              borderRadius: "999px",
+              border: "1px solid rgba(248, 243, 234, 0.6)",
+              boxShadow: "0 0 18px rgba(248, 243, 234, 0.45)",
+              animation: "pulseGlow 1s infinite",
+              opacity: 0.7
+            }
           }
           sx={{
             "@keyframes pulse": {
-              "0%": { transform: "scale(0.9)", opacity: 0.4 },
-              "70%": { transform: "scale(1.1)", opacity: 0 },
+              "0%": { transform: "scale(0.88)", opacity: 0.7 },
+              "70%": { transform: "scale(1.18)", opacity: 0 },
+              "100%": { opacity: 0 }
+            },
+            "@keyframes pulseGlow": {
+              "0%": { transform: "scale(0.9)", opacity: 0.6 },
+              "70%": { transform: "scale(1.28)", opacity: 0 },
               "100%": { opacity: 0 }
             }
           }}
