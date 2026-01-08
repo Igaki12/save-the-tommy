@@ -97,7 +97,13 @@ const GameScreen = () => {
                 <Text fontSize="xs" color="whiteAlpha.500" mb={2}>
                   {isSelected ? "Full Command" : "Masked Hint"}
                 </Text>
-                <Heading size="md" fontWeight="600" color="whiteAlpha.900">
+                <Heading
+                  size="md"
+                  fontWeight="600"
+                  color="whiteAlpha.900"
+                  whiteSpace="normal"
+                  wordBreak="break-word"
+                >
                   {isSelected ? card.full : card.preview}
                 </Heading>
               </Box>
